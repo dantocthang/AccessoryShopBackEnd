@@ -13,16 +13,13 @@ import com.nhom9.springjwt.payload.response.ProductResponse;
 
 @Component
 public interface ProductService {
-	ProductResponse createProduct(ProductRequest productRequest);
+    Product createProduct(ProductRequest productRequest);
 
     Optional<Product> updateProduct(Long productId, ProductRequest productRequest);
-	
 
     void deleteProduct(Long productId);
-	
 
     Product getASingleProduct(Long productId);
-	
 
     List<Product> getAllProducts();
 }

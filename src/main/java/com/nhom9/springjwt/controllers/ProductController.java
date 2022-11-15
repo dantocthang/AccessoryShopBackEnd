@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,31 +54,18 @@ public class ProductController {
 	}
 
 	@PostMapping(value = "/create", consumes = { "*/*" })
-	public ResponseEntity<MessageResponse> createProduct(@RequestBody ProductRequest product, Errors errors) {
-		try {
-			if (errors.hasErrors()) {
-				return new ResponseEntity<>(new MessageResponse("Has errors"), HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			productService.createProduct(product);
-			
-			return new ResponseEntity<>(new MessageResponse("New Product created successfully"), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequest product) {
+		return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
 	}
 
 	@PutMapping(value = "/{id}", consumes = { "*/*" })
-	public ResponseEntity<MessageResponse> updateProduct(@PathVariable("id") Long id, @RequestBody ProductRequest product){
-		try {
-			Optional<Product> updatedProduct = productService.updateProduct(id, product);
-			return new ResponseEntity<>(new MessageResponse("New Employee updated successfully"), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<Optional<Product>> updateProduct(@PathVariable("id") Long id,
+			@RequestBody @Valid ProductRequest product) {
+		return new ResponseEntity<>(productService.updateProduct(id, product), HttpStatus.CREATED);
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("id") Long id){
+	public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("id") Long id) {
 		try {
 			productService.deleteProduct(id);
 			return new ResponseEntity<>(null, HttpStatus.OK);

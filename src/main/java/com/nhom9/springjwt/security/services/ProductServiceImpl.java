@@ -23,27 +23,27 @@ public class ProductServiceImpl implements ProductService {
 	ProductRepository productRepo;
 
 	@Override
-	public ProductResponse createProduct(ProductRequest productRequest) {
-		// TODO Auto-generated method stub
+	public Product createProduct(ProductRequest productRequest) {
 		Category category = categoryRepo.findById(productRequest.getCategory_id()).orElseThrow();
 		Product product = new Product(productRequest.getName(), productRequest.getDescription(),
-				productRequest.getStock(), productRequest.getPrice(), productRequest.getYear(), category);
-		productRepo.save(product);
-		return new ProductResponse(product, null,"New product created successfully");
+				productRequest.getStock(), productRequest.getPrice(), productRequest.getModelYear(),
+				productRequest.getImageUrl(), productRequest.getImagePublicId(), category);
+		return productRepo.save(product);
 	}
 
 	@Override
 	public Optional<Product> updateProduct(Long productId, ProductRequest productRequest) {
 		// TODO Auto-generated method stub
 		Optional<Product> product = productRepo.findById(productId);
-		System.out.println(product.get().getId());
 		if (product.isPresent()) {
 			Category category = categoryRepo.findById(productRequest.getCategory_id()).orElseThrow();
 			product.get().setName(productRequest.getName());
 			product.get().setDescription(productRequest.getDescription());
 			product.get().setPrice(productRequest.getPrice());
 			product.get().setStock(productRequest.getStock());
-			product.get().setYear(productRequest.getYear());
+			product.get().setModelYear(productRequest.getModelYear());
+			product.get().setImageUrl(productRequest.getImageUrl());
+			product.get().setImagePublicId(productRequest.getImagePublicId());
 			product.get().setCategory(category);
 			productRepo.save(product.get());
 			return product;

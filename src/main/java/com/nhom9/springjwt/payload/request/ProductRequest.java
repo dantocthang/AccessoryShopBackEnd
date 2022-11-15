@@ -12,23 +12,25 @@ public class ProductRequest {
 	@NotBlank(message = "Description is required")
 	private String description;
 
-	@NotBlank
 	@NotNull
 	@Min(0)
 	private int stock;
 
-	@NotBlank
 	@NotNull
 	@Min(0)
 	private int price;
 
-	@NotBlank
 	@NotNull
 	@Min(1000)
 	@Max(3000)
-	private int year;
-	
-	@NotBlank
+	private int modelYear;
+
+	@NotBlank(message = "Image is required")
+	private String imageUrl;
+
+	@NotBlank(message = "Image is required")
+	private String imagePublicId;
+
 	@NotNull
 	private Long category_id;
 
@@ -48,6 +50,30 @@ public class ProductRequest {
 		this.description = description;
 	}
 
+	public int getModelYear() {
+		return modelYear;
+	}
+
+	public void setModelYear(int modelYear) {
+		this.modelYear = modelYear;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public String getImagePublicId() {
+		return imagePublicId;
+	}
+
+	public void setImagePublicId(String imagePublicId) {
+		this.imagePublicId = imagePublicId;
+	}
+
 	public int getStock() {
 		return stock;
 	}
@@ -64,22 +90,12 @@ public class ProductRequest {
 		this.price = price;
 	}
 
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
 	public Long getCategory_id() {
 		return category_id;
 	}
 
 	public void setCategory_id(Long category_id) {
 		this.category_id = category_id;
-	}	
-	
-	
-	
+	}
+
 }
