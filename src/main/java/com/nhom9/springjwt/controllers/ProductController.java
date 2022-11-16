@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nhom9.springjwt.models.Category;
 import com.nhom9.springjwt.models.Product;
 import com.nhom9.springjwt.payload.request.ProductRequest;
 import com.nhom9.springjwt.payload.response.MessageResponse;
-import com.nhom9.springjwt.repository.CategoryRepository;
-import com.nhom9.springjwt.repository.ProductRepository;
 import com.nhom9.springjwt.security.services.ProductService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://127.0.0.1:5173", maxAge = 3600)
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {

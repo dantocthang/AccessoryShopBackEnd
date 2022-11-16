@@ -34,6 +34,9 @@ public class ProductRequest {
 	@NotNull
 	private Long category_id;
 
+	@NotNull
+	private Long brand_id;
+
 	public String getName() {
 		return name;
 	}
@@ -96,6 +99,14 @@ public class ProductRequest {
 
 	public void setCategory_id(Long category_id) {
 		this.category_id = category_id;
+	}
+
+	public Long getBrand_id() {
+		return brand_id;
+	}
+
+	public void setBrand_id(Long brand_id) {
+		this.brand_id = brand_id;
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,23 +19,23 @@ public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@NotBlank(message="Name is required")
+
+	@NotBlank(message = "Name is required")
 	private String name;
-	
+
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = true)
 	private List<Product> products = new ArrayList<>();
-	
+
 	public Category() {
-		
+
 	}
 
-	public Category(Long id, @NotBlank(message = "Name is required") String name, List<Product> producst) {
+	public Category(Long id, @NotBlank(message = "Name is required") String name, List<Product> products) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.products = producst;
+		this.products = products;
 	}
 
 	public Long getId() {
@@ -53,13 +54,12 @@ public class Category {
 		this.name = name;
 	}
 
-	public List<Product> getProducst() {
+	public List<Product> getProducts() {
 		return products;
 	}
 
-	public void setProducst(List<Product> producst) {
-		this.products = producst;
+	public void setProducts(List<Product> products) {
+		this.products = products;
 	}
-	
-	
+
 }

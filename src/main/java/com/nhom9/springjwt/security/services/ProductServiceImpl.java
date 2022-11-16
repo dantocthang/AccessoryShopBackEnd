@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.stereotype.Service;
 
+import com.nhom9.springjwt.models.Brand;
 import com.nhom9.springjwt.models.Category;
 import com.nhom9.springjwt.models.Product;
 import com.nhom9.springjwt.payload.request.ProductRequest;
 import com.nhom9.springjwt.payload.response.MessageResponse;
 import com.nhom9.springjwt.payload.response.ProductResponse;
+import com.nhom9.springjwt.repository.BrandRepository;
 import com.nhom9.springjwt.repository.CategoryRepository;
 import com.nhom9.springjwt.repository.ProductRepository;
 
@@ -20,14 +22,17 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	CategoryRepository categoryRepo;
 	@Autowired
+	BrandRepository brandRepo;
+	@Autowired
 	ProductRepository productRepo;
 
 	@Override
 	public Product createProduct(ProductRequest productRequest) {
 		Category category = categoryRepo.findById(productRequest.getCategory_id()).orElseThrow();
+		Brand brand = brandRepo.findById(productRequest.getBrand_id()).orElseThrow();
 		Product product = new Product(productRequest.getName(), productRequest.getDescription(),
 				productRequest.getStock(), productRequest.getPrice(), productRequest.getModelYear(),
-				productRequest.getImageUrl(), productRequest.getImagePublicId(), category);
+				productRequest.getImageUrl(), productRequest.getImagePublicId(), category, brand);
 		return productRepo.save(product);
 	}
 
@@ -37,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
 		Optional<Product> product = productRepo.findById(productId);
 		if (product.isPresent()) {
 			Category category = categoryRepo.findById(productRequest.getCategory_id()).orElseThrow();
+			Brand brand = brandRepo.findById(productRequest.getBrand_id()).orElseThrow();
 			product.get().setName(productRequest.getName());
 			product.get().setDescription(productRequest.getDescription());
 			product.get().setPrice(productRequest.getPrice());
@@ -45,6 +51,7 @@ public class ProductServiceImpl implements ProductService {
 			product.get().setImageUrl(productRequest.getImageUrl());
 			product.get().setImagePublicId(productRequest.getImagePublicId());
 			product.get().setCategory(category);
+			product.get().setBrand(brand);
 			productRepo.save(product.get());
 			return product;
 		} else {

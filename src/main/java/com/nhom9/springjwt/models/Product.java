@@ -45,10 +45,15 @@ public class Product {
 	@NotBlank(message = "Image is required")
 	private String imagePublicId;
 
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
+	// @JsonIgnore
 	@JoinColumn(name = "category_id")
+	@ManyToOne
 	private Category category;
+
+	// @JsonIgnore
+	@JoinColumn(name = "brand_id")
+	@ManyToOne
+	private Brand brand;
 
 	public Product() {
 
@@ -58,7 +63,7 @@ public class Product {
 			@NotBlank(message = "Description is required") String description, @NotNull @Min(0) int stock,
 			@NotNull @Min(0) int price, @NotNull @Min(1000) @Max(3000) int modelYear,
 			@NotBlank(message = "Image is required") String imageUrl,
-			@NotBlank(message = "Image is required") String imagePublicId, Category category) {
+			@NotBlank(message = "Image is required") String imagePublicId, Category category, Brand brand) {
 		this.name = name;
 		this.description = description;
 		this.stock = stock;
@@ -67,78 +72,87 @@ public class Product {
 		this.imageUrl = imageUrl;
 		this.imagePublicId = imagePublicId;
 		this.category = category;
+		this.brand = brand;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public int getStock() {
-		return stock;
-	}
-
-	public int getPrice() {
-		return price;
-	}
-
-	public int getModelYear() {
-		return modelYear;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public void setImagePublicId(String imagePublicId) {
-		this.imagePublicId = imagePublicId;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public String getImagePublicId() {
-		return imagePublicId;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public int getStock() {
+		return stock;
 	}
 
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
 
+	public int getPrice() {
+		return price;
+	}
+
 	public void setPrice(int price) {
 		this.price = price;
+	}
+
+	public int getModelYear() {
+		return modelYear;
 	}
 
 	public void setModelYear(int modelYear) {
 		this.modelYear = modelYear;
 	}
 
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public String getImagePublicId() {
+		return imagePublicId;
+	}
+
+	public void setImagePublicId(String imagePublicId) {
+		this.imagePublicId = imagePublicId;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public Brand getBrand() {
+		return brand;
+	}
+
+	public void setBrand(Brand brand) {
+		this.brand = brand;
 	}
 
 	@Override
@@ -151,7 +165,10 @@ public class Product {
 		result = prime * result + stock;
 		result = prime * result + price;
 		result = prime * result + modelYear;
+		result = prime * result + ((imageUrl == null) ? 0 : imageUrl.hashCode());
+		result = prime * result + ((imagePublicId == null) ? 0 : imagePublicId.hashCode());
 		result = prime * result + ((category == null) ? 0 : category.hashCode());
+		result = prime * result + ((brand == null) ? 0 : brand.hashCode());
 		return result;
 	}
 
@@ -185,10 +202,25 @@ public class Product {
 			return false;
 		if (modelYear != other.modelYear)
 			return false;
+		if (imageUrl == null) {
+			if (other.imageUrl != null)
+				return false;
+		} else if (!imageUrl.equals(other.imageUrl))
+			return false;
+		if (imagePublicId == null) {
+			if (other.imagePublicId != null)
+				return false;
+		} else if (!imagePublicId.equals(other.imagePublicId))
+			return false;
 		if (category == null) {
 			if (other.category != null)
 				return false;
 		} else if (!category.equals(other.category))
+			return false;
+		if (brand == null) {
+			if (other.brand != null)
+				return false;
+		} else if (!brand.equals(other.brand))
 			return false;
 		return true;
 	}
