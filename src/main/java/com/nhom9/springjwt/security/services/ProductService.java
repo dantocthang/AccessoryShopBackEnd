@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.nhom9.springjwt.models.Product;
@@ -21,5 +22,5 @@ public interface ProductService {
 
     Product getASingleProduct(Long productId);
 
-    List<Product> getAllProducts();
+    Page<Product> getAllProducts(Optional<Integer> page, Optional<String> sortBy);
 }

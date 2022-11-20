@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.nhom9.springjwt.models.Brand;
@@ -16,6 +18,7 @@ import com.nhom9.springjwt.payload.response.ProductResponse;
 import com.nhom9.springjwt.repository.BrandRepository;
 import com.nhom9.springjwt.repository.CategoryRepository;
 import com.nhom9.springjwt.repository.ProductRepository;
+import org.springframework.data.domain.Sort;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -77,9 +80,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> getAllProducts() {
+	public Page<Product> getAllProducts(Optional<Integer> page, Optional<String> sortBy) {
 		// TODO Auto-generated method stub
-		return productRepo.findAll();
+		return productRepo.findAll(PageRequest.of(
+				page.orElse(0),
+				20,
+				Sort.Direction.ASC, sortBy.orElse("id")));
 	}
 
 }
