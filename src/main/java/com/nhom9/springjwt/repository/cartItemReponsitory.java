@@ -7,12 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.nhom9.springjwt.models.Product;
+import com.nhom9.springjwt.models.cartItem;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
-	
-	
-	@Query(value="SELECT * FROM product WHERE name LIKE BINARY CONCAT('%',:text,'%')",nativeQuery = true)
-	List<Product> findByNameLike(@Param("text") String text);
+public interface cartItemReponsitory extends JpaRepository<cartItem, Long> {
+	List<cartItem> findByUser_Id(long userId);
+
 }
