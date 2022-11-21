@@ -23,58 +23,59 @@ public class cartItemServiceImpl implements cartItemService {
 	UserRepository userRepo;
 	@Autowired
 	cartItemReponsitory cartItemRepo;
-	
-	
-	
 
 	@Override
 	public cartItem createCartItem(cartItemRequest cartItemRequest) {
 		// TODO Auto-generated method stub
-		User user = userRepo.findById(cartItemRequest.getUser_id()).orElseThrow();
-		Product product = productRepo.findById(cartItemRequest.getProduct_id()).orElseThrow();
-		cartItem cartItem = new cartItem( user, product, cartItemRequest.getQuantity());
-		
-		return cartItemRepo.save(cartItem);
+		cartItem isInCart = cartItemRepo.findByUser_IdAndProduct_Id(cartItemRequest.getUser_id(),
+				cartItemRequest.getProduct_id());
+		if (isInCart != null) {
+			if (isInCart.getQuantity() + cartItemRequest.getQuantity() <= isInCart.getProduct().getStock())
+				isInCart.setQuantity(isInCart.getQuantity() + cartItemRequest.getQuantity());
+			else
+				isInCart.setQuantity(isInCart.getProduct().getStock());
+			return cartItemRepo.save(isInCart);
+		} else {
+			User user = userRepo.findById(cartItemRequest.getUser_id()).orElseThrow();
+			Product product = productRepo.findById(cartItemRequest.getProduct_id()).orElseThrow();
+			cartItem cartItem = new cartItem(user, product, cartItemRequest.getQuantity());
+
+			return cartItemRepo.save(cartItem);
+		}
 	}
-	
+
 	@Override
 	public Optional<cartItem> updateCartItem(long cartItemId, cartItemRequest cartItemRequest) {
 		// TODO Auto-generated method stub
 		Optional<cartItem> cartItem = cartItemRepo.findById(cartItemId);
-		
-		if(cartItem.isPresent())
-		{
+
+		if (cartItem.isPresent()) {
 			cartItem.get().setQuantity(cartItemRequest.getQuantity());
-			
+
 			cartItemRepo.save(cartItem.get());
 			return cartItem;
-		}
-		else
-		{
+		} else {
 			throw new InvalidConfigurationPropertyValueException("cartItemId", cartItemId, "Not found");
 		}
-		
+
 	}
+
 	@Override
 	public void deteleCartItem(long cartItemId) {
 		// TODO Auto-generated method stub
-		if(cartItemRepo.findById(cartItemId).get().getId().equals(cartItemId))
-		{
+		if (cartItemRepo.findById(cartItemId).get().getId().equals(cartItemId)) {
 			cartItemRepo.deleteById(cartItemId);
-		}
-		else
+		} else
 			throw new InvalidConfigurationPropertyValueException("cartItemId", cartItemId, "Not Found");
-		
+
 	}
-	
-	
-	
+
 	@Override
 	public List<cartItem> getCart(long userId) {
 		// TODO Auto-generated method stub
-		//return cartItemRepo.findByUser_Id(userId);
+		// return cartItemRepo.findByUser_Id(userId);
 		return cartItemRepo.findByUser_Id(userId);
-		
+
 	}
-	
+
 }

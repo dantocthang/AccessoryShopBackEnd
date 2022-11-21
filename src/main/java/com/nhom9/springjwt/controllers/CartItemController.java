@@ -31,49 +31,40 @@ import com.nhom9.springjwt.security.services.cartItemService;
 public class CartItemController {
 	@Autowired
 	cartItemService cartService;
-	
-	/*get list of item in cart of user*/
-	@PostMapping("/getCart/{id}")
-	public ResponseEntity<List<cartItem>> getCart(@PathVariable("id") Long id){
+
+	/* get list of item in cart of user */
+	@GetMapping("/getCart/{id}")
+	public ResponseEntity<List<cartItem>> getCart(@PathVariable("id") Long id) {
 		try {
 			List<cartItem> cartItems = cartService.getCart(id);
 			return new ResponseEntity<>(cartItems, HttpStatus.OK);
-		}
-		catch(Exception e)
-		{
-			return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
-	/*create cart item*/
-	@PostMapping(value = "/create", consumes = { "*/*" })
-	public ResponseEntity<cartItem> creatCartItem(@Valid @RequestBody cartItemRequest cartItem)
-	{
-		return new ResponseEntity<>(cartService.createCartItem(cartItem), HttpStatus.CREATED);
-	}
-	
-	/*delete cart item with id*/
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<MessageResponse> deleteCartItem(@PathVariable("id") Long id)
-	{
-		try {
-			cartService.deteleCartItem(id);
-			return new ResponseEntity<>(null, HttpStatus.OK);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
-	/*update cart item with id*/
+
+	/* create cart item */
+	@PostMapping(value = "/create", consumes = { "*/*" })
+	public ResponseEntity<cartItem> creatCartItem(@Valid @RequestBody cartItemRequest cartItem) {
+		return new ResponseEntity<>(cartService.createCartItem(cartItem), HttpStatus.CREATED);
+	}
+
+	/* delete cart item with id */
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<MessageResponse> deleteCartItem(@PathVariable("id") Long id) {
+		try {
+			cartService.deteleCartItem(id);
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/* update cart item with id */
 	@PutMapping(value = "/{id}", consumes = { "*/*" })
 	public ResponseEntity<Optional<cartItem>> updateCartItem(@PathVariable("id") Long id,
-			@RequestBody @Valid cartItemRequest cartItem)
-	{
-		return new ResponseEntity<>(cartService.updateCartItem(id, cartItem),HttpStatus.OK);
+			@RequestBody @Valid cartItemRequest cartItem) {
+		return new ResponseEntity<>(cartService.updateCartItem(id, cartItem), HttpStatus.OK);
 	}
-	
-	
-	
+
 }

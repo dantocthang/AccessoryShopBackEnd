@@ -13,4 +13,5 @@ import com.nhom9.springjwt.models.cartItem;
 public interface cartItemReponsitory extends JpaRepository<cartItem, Long> {
 	List<cartItem> findByUser_Id(long userId);
 
+	cartItem findByUser_IdAndProduct_Id(long user_id, long product_id);
 }
