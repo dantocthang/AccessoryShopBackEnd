@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.nhom9.springjwt.controllers;
 
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.example.demo.repository.CategoryRepository;
+import com.nhom9.springjwt.repository.CategoryRepository;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.nhom9.springjwt.payload.response.ResourceNotFoundException;
+import com.nhom9.springjwt.models.Category;
 
-import com.example.demo.excetion.ResourceNotFoundException;
-import com.example.demo.model.Category;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
