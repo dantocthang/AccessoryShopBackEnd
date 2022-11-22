@@ -55,7 +55,7 @@ public class CategoryController {
 		
 		// update category rest api
 		
-		@PutMapping("/category/{id}")
+		@PutMapping("/update/{id}")
 		public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category caterogyDetails){
 			Category category = categoryRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("Category not exist with id :" + id));
@@ -68,7 +68,7 @@ public class CategoryController {
 		
 		
 		// delete employee rest api
-		@DeleteMapping("/category/{id}")
+		@DeleteMapping("/detele/{id}")
 		public ResponseEntity<Map<String, Boolean>> deletecategory(@PathVariable Long id){
 			Category categorymodel = categoryRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("Category not exist with id :" + id));
