@@ -26,7 +26,7 @@ import com.example.demo.model.Category;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/category")
 public class CategoryController {
 		
 	@Autowired
@@ -34,13 +34,13 @@ public class CategoryController {
 
 	
 	// get all categorys
-		@GetMapping("/category")
+		@GetMapping("/")
 		public List<Category> getAlllCategory(){
 			return categoryRepository.findAll();
 		}	
 		
 		// create categorys rest api
-		@PostMapping("/category")
+		@PostMapping("/create")
 		public Category createCaterogy(@RequestBody Category category) {
 			return categoryRepository.save(category);
 		}
