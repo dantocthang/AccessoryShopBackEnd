@@ -1,5 +1,6 @@
 package com.nhom9.springjwt.models;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,8 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "users", 
     uniqueConstraints = { 
       @UniqueConstraint(columnNames = "username"),
-      @UniqueConstraint(columnNames = "email") 
+      @UniqueConstraint(columnNames = "email"),
+      @UniqueConstraint(columnNames = "role")
     })
 public class User {
   @Id
@@ -87,7 +89,7 @@ public class User {
     this.password = password;
   }
 
-  public @NotBlank @Size(max = 120) String getRole() {
+  public String getRole() {
     return role;
   }
 

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,7 +32,7 @@ public class UserDetailsImpl implements UserDetails {
  @JsonIgnore
  private String password;
 
- private static Collection<? extends GrantedAuthority> authorities;
+ private Collection<? extends GrantedAuthority> authorities;
 
  private String role;
 
@@ -45,19 +46,29 @@ public class UserDetailsImpl implements UserDetails {
     this.role = roleString;
   }
 
-  public static UserDetailsImpl build(User user) {
-     List<GrantedAuthority> authorities = UserDetails.getRoles()
-    .map(user_roles -> new SimpleGrantedAuthority(role.getName().name()))
-    .collect(Collectors.toList());
-    return new UserDetailsImpl(
-        user.getId(),
-        user.getUsername(),
-        user.getEmail(),
-        user.getPassword(),
-        user.getRole(),
-        authorities);
+  public UserDetailsImpl(Long id, String username, String email, String password, String role) {
+	super();
+	this.id = id;
+	this.username = username;
+	this.email = email;
+	this.password = password;
+//	this.authorities = ;
+	this.role = role;
+}
 
-  }
+//public static UserDetailsImpl build(User user) {
+//     List<GrantedAuthority> authorities = user;
+//    
+//     
+//    return new UserDetailsImpl(
+//        user.getId(),
+//        user.getUsername(),
+//        user.getEmail(),
+//        user.getPassword(),
+//        user.getRole(),
+//        authorities);
+//
+//  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -112,4 +123,8 @@ public class UserDetailsImpl implements UserDetails {
     return Objects.equals(id, user.id);
   
   }
+
+public String getRole() {
+    return role;
+}
 }
