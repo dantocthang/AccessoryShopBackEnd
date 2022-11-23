@@ -1,12 +1,15 @@
 package com.nhom9.springjwt.models;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "users", 
@@ -32,11 +35,15 @@ public class User {
   @Size(max = 120)
   private String password;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(  name = "user_roles", 
-        joinColumns = @JoinColumn(name = "user_id"), 
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+  // @ManyToMany(fetch = FetchType.LAZY)
+  // @JoinTable(  name = "user_roles", 
+  //       joinColumns = @JoinColumn(name = "user_id"), 
+  //       inverseJoinColumns = @JoinColumn(name = "role_id"))
+  // private Set<Role> roles = new HashSet<>();
+
+  @NotBlank
+  @Size(max = 120)
+  private String role;
 
   public User() {
   }
@@ -45,6 +52,7 @@ public class User {
     this.username = username;
     this.email = email;
     this.password = password;
+    this.role = "user";
   }
 
   public Long getId() {
@@ -79,11 +87,13 @@ public class User {
     this.password = password;
   }
 
-  public Set<Role> getRoles() {
-    return roles;
+  public @NotBlank @Size(max = 120) String getRole() {
+    return role;
   }
 
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
+  public void setRole(@NotBlank @Size(max = 120) @NotBlank @Size(max = 120) String role) {
+    this.role = role;
   }
+
+  
 }

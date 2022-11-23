@@ -1,14 +1,14 @@
-package com.nhom9.springjwt.repository;
+// package com.nhom9.springjwt.repository;
 
-import java.util.Optional;
+// import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+// import org.springframework.data.jpa.repository.JpaRepository;
+// import org.springframework.stereotype.Repository;
 
-import com.nhom9.springjwt.models.ERole;
-import com.nhom9.springjwt.models.Role;
+// import com.nhom9.springjwt.models.ERole;
+// import com.nhom9.springjwt.models.Role;
 
-@Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-  Optional<Role> findByName(ERole name);
-}
+// @Repository
+// public interface RoleRepository extends JpaRepository<Role, Long> {
+//   Optional<Role> findByName(ERole name);
+// }

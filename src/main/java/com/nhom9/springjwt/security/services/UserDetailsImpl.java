@@ -1,8 +1,15 @@
 package com.nhom9.springjwt.security.services;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -13,39 +20,43 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nhom9.springjwt.models.User;
 
 public class UserDetailsImpl implements UserDetails {
-  private static final long serialVersionUID = 1L;
+ private static final long serialVersionUID = 1L;
 
-  private Long id;
+ private Long id;
 
-  private String username;
+ private String username;
 
-  private String email;
+ private String email;
 
-  @JsonIgnore
-  private String password;
+ @JsonIgnore
+ private String password;
 
-  private Collection<? extends GrantedAuthority> authorities;
+ private static Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities) {
+ private String role;
+
+  public UserDetailsImpl(Long id, String username, String email, String password, List<GrantedAuthority> list,
+      Collection<? extends GrantedAuthority> authorities, String roleString) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
     this.authorities = authorities;
+    this.role = roleString;
   }
 
   public static UserDetailsImpl build(User user) {
-    List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-        .collect(Collectors.toList());
-
+     List<GrantedAuthority> authorities = UserDetails.getRoles()
+    .map(user_roles -> new SimpleGrantedAuthority(role.getName().name()))
+    .collect(Collectors.toList());
     return new UserDetailsImpl(
-        user.getId(), 
-        user.getUsername(), 
+        user.getId(),
+        user.getUsername(),
         user.getEmail(),
-        user.getPassword(), 
+        user.getPassword(),
+        user.getRole(),
         authorities);
+
   }
 
   @Override
@@ -99,5 +110,6 @@ public class UserDetailsImpl implements UserDetails {
       return false;
     UserDetailsImpl user = (UserDetailsImpl) o;
     return Objects.equals(id, user.id);
+  
   }
 }
