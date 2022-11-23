@@ -5,18 +5,18 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import com.nhom9.springjwt.models.cartItem;
-import com.nhom9.springjwt.payload.request.cartItemRequest;
+import com.nhom9.springjwt.models.CartItem;
+import com.nhom9.springjwt.payload.request.CartItemRequest;
 
 @Component
-public interface cartItemService {
-	cartItem createCartItem(cartItemRequest cartItemRequest);
+public interface CartItemService {
+	CartItem createCartItem(CartItemRequest cartItemRequest);
 	
-	Optional<cartItem> updateCartItem(long cartItemId, cartItemRequest cartItem);
+	Optional<CartItem> updateCartItem(long cartItemId, CartItemRequest cartItem);
 	
 	void deteleCartItem(long cartItemId);
 	
 	
-	List<cartItem> getCart(long userId);
+	List<CartItem> getCart(long userId);
 	
 }
