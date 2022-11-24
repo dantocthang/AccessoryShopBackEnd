@@ -5,31 +5,30 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Brand {
+public class District {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name is required")
     private String name;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "brand", orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "district", orphanRemoval = true)
+    private List<Ward> wards = new ArrayList<>();
 
-    public Brand() {
-
-    }
+    @JoinColumn(name = "city_id")
+    @ManyToOne
+    private City city;
 
     public Long getId() {
         return id;
@@ -47,18 +46,29 @@ public class Brand {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Ward> getWards() {
+        return wards;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setWards(List<Ward> wards) {
+        this.wards = wards;
     }
 
-    public Brand(Long id, @NotBlank(message = "Name is required") String name, List<Product> products) {
-        this.id = id;
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public District() {
+    }
+
+    public District(String name, List<Ward> wards, City city) {
         this.name = name;
-        this.products = products;
+        this.wards = wards;
+        this.city = city;
     }
 
 }
