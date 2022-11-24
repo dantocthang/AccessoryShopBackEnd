@@ -104,7 +104,7 @@ public class InvoiceController {
 	}
 
 //	Cập nhật lại các sản phẩm khi đã chỉnh, thêm, xóa trong giỏ hàng
-	@PutMapping(value = "/updateProductsInInvoice/{invoiceId}", consumes = { "*/*" })
+	@PutMapping(value = "/updateInvoice/{invoiceId}", consumes = { "*/*" })
 	public ResponseEntity<Optional<Invoice>> updateProductsInInvoice(@PathVariable("invoiceId") Long invoiceId,
 			@Valid @RequestBody InvoiceRequest invoiceRequest) {
 
