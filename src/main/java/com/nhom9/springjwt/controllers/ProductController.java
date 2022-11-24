@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,10 +33,11 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 
-	@GetMapping("/")
-	public ResponseEntity<List<Product>> getAllProducts(@RequestParam(required = false) String title) {
+	@GetMapping("")
+	public ResponseEntity<Page<Product>> getAllProducts(@RequestParam Optional<Integer> page,
+			@RequestParam Optional<String> sortBy) {
 		try {
-			List<Product> products = productService.getAllProducts();
+			Page<Product> products = productService.getAllProducts(page, sortBy);
 			return new ResponseEntity<>(products, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
