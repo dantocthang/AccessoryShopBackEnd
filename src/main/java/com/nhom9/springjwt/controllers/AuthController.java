@@ -51,7 +51,8 @@ public class AuthController {
   @Autowired
   JwtUtils jwtUtils;
 
-  @CrossOrigin(origins = "http://127.0.0.1:5173")
+  // @CrossOrigin(origins = "http://127.0.0.1:5173")
+  @CrossOrigin(origins = "*", maxAge=3600)
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -59,18 +60,24 @@ public class AuthController {
         new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
+    
     String jwt = jwtUtils.generateJwtToken(authentication);
+    System.out.println("======TEST 1=====> jwt = "+jwt);
+
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    System.out.println("======TEST 2=====> roles = "+userDetails.getRole().toString());
+    // String roleName = userDetails.getRole().toString();
     // List<String> roles = userDetails.getAuthorities().stream()
     //     .map(item -> item.getAuthority())
     //     .collect(Collectors.toList());
 
-    return ResponseEntity.ok(new JwtResponse(jwt,
+    return ResponseEntity.ok(new JwtResponse(
+        jwt,
         userDetails.getId(),
         userDetails.getUsername(),
         userDetails.getEmail(),
-        userDetails.getRole()));
+        userDetails.getRole().toString()));
   }
 
  /**
@@ -92,10 +99,8 @@ public class AuthController {
     }
 
     // Create new user's account
-    User user = new User(signUpRequest.getUsername(),
-        signUpRequest.getEmail(),
-        encoder.encode(signUpRequest.getPassword()));
-
+    User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),  encoder.encode(signUpRequest.getPassword()) );
+       
     // Set<String> strRoles = signUpRequest.getRole();
     // Set<UserDetailsImpl> roles = new HashSet<>();
 
