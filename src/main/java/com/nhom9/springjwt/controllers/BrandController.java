@@ -20,50 +20,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nhom9.springjwt.models.Product;
-import com.nhom9.springjwt.payload.request.ProductRequest;
+import com.nhom9.springjwt.models.Brand;
+import com.nhom9.springjwt.payload.request.BrandRequest;
 import com.nhom9.springjwt.payload.response.MessageResponse;
+import com.nhom9.springjwt.security.services.BrandService;
 import com.nhom9.springjwt.security.services.ProductService;
 
 @CrossOrigin(origins = "http://127.0.0.1:5173", maxAge = 3600)
 @RestController
-@RequestMapping("/api/product")
-public class ProductController {
-	@Autowired
-	ProductService productService;
+@RequestMapping("/api/brand")
+public class BrandController {
+    @Autowired
+	BrandService brandService;
 
 	@GetMapping("/")
-	public ResponseEntity<List<Product>> getAllProducts(@RequestParam(required = false) String title) {
+	public ResponseEntity<List<Brand>> getAllBrands(@RequestParam(required = false) String title) {
 		try {
-			List<Product> products = productService.getAllProducts();
-			return new ResponseEntity<>(products, HttpStatus.OK);
+			List<Brand> brands = brandService.getAllBrands();
+			return new ResponseEntity<>(brands, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
-		Product product = productService.getASingleProduct(id);
-		return new ResponseEntity<>(product, HttpStatus.OK);
+	public ResponseEntity<Brand> getBrandById(@PathVariable("id") Long id) {
+		Brand brand = brandService.getASingleBrand(id);
+		return new ResponseEntity<>(brand, HttpStatus.OK);
 
 	}
 
 	@PostMapping(value = "/create", consumes = { "*/*" })
-	public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequest product) {
-		return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
+	public ResponseEntity<Brand> createBrand(@Valid @RequestBody BrandRequest brand) {
+		return new ResponseEntity<>(brandService.createBrand(brand), HttpStatus.CREATED);
 	}
 
 	@PutMapping(value = "/{id}", consumes = { "*/*" })
-	public ResponseEntity<Optional<Product>> updateProduct(@PathVariable("id") Long id,
-			@RequestBody @Valid ProductRequest product) {
-		return new ResponseEntity<>(productService.updateProduct(id, product), HttpStatus.CREATED);
+	public ResponseEntity<Optional<Brand>> updateBrand(@PathVariable("id") Long id,
+			@RequestBody @Valid BrandRequest brand) {
+		return new ResponseEntity<>(brandService.updateBrand(id, brand), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<MessageResponse> deleteProduct(@PathVariable("id") Long id) {
+	public ResponseEntity<MessageResponse> deleteBrand(@PathVariable("id") Long id) {
 		try {
-			productService.deleteProduct(id);
+			brandService.deleteBrand(id);
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

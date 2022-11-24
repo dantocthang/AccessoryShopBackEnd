@@ -20,7 +20,8 @@ public class SpringBootSecurityJwtApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry reg) {
-				reg.addMapping("/**").allowedOrigins("http://127.0.0.1:5173");
+				 reg.addMapping("/**").allowedOrigins("http://127.0.0.1:5173");
+//				reg.addMapping("/**").allowedOrigins("http://localhost:5173");
 			}
 		};
 	}
