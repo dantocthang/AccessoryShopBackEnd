@@ -1,5 +1,6 @@
 package com.nhom9.springjwt.security.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,26 +10,26 @@ import org.springframework.stereotype.Service;
 
 import com.nhom9.springjwt.models.Product;
 import com.nhom9.springjwt.models.User;
-import com.nhom9.springjwt.models.cartItem;
-import com.nhom9.springjwt.payload.request.cartItemRequest;
+import com.nhom9.springjwt.models.CartItem;
+import com.nhom9.springjwt.payload.request.CartItemRequest;
+import com.nhom9.springjwt.repository.CartItemRepository;
 import com.nhom9.springjwt.repository.ProductRepository;
 import com.nhom9.springjwt.repository.UserRepository;
-import com.nhom9.springjwt.repository.cartItemReponsitory;
 
 @Service
-public class cartItemServiceImpl implements cartItemService {
+public class CartItemServiceImpl implements CartItemService {
 	@Autowired
 	ProductRepository productRepo;
 	@Autowired
 	UserRepository userRepo;
 	@Autowired
-	cartItemReponsitory cartItemRepo;
+	CartItemRepository cartItemRepo;
 
 	@Override
-	public cartItem createCartItem(cartItemRequest cartItemRequest) {
+	public CartItem createCartItem(CartItemRequest cartItemRequest) {
 		// TODO Auto-generated method stub
-		cartItem isInCart = cartItemRepo.findByUser_IdAndProduct_Id(cartItemRequest.getUser_id(),
-				cartItemRequest.getProduct_id());
+		CartItem isInCart = cartItemRepo.findByUser_IdAndProduct_IdAndStatus(cartItemRequest.getUser_id(), cartItemRequest.getProduct_id(), 0);
+
 		if (isInCart != null) {
 			if (isInCart.getQuantity() + cartItemRequest.getQuantity() <= isInCart.getProduct().getStock())
 				isInCart.setQuantity(isInCart.getQuantity() + cartItemRequest.getQuantity());
@@ -38,16 +39,16 @@ public class cartItemServiceImpl implements cartItemService {
 		} else {
 			User user = userRepo.findById(cartItemRequest.getUser_id()).orElseThrow();
 			Product product = productRepo.findById(cartItemRequest.getProduct_id()).orElseThrow();
-			cartItem cartItem = new cartItem(user, product, cartItemRequest.getQuantity());
+			CartItem cartItem = new CartItem(user, product, cartItemRequest.getQuantity());
 
 			return cartItemRepo.save(cartItem);
 		}
 	}
 
 	@Override
-	public Optional<cartItem> updateCartItem(long cartItemId, cartItemRequest cartItemRequest) {
+	public Optional<CartItem> updateCartItem(long cartItemId, CartItemRequest cartItemRequest) {
 		// TODO Auto-generated method stub
-		Optional<cartItem> cartItem = cartItemRepo.findById(cartItemId);
+		Optional<CartItem> cartItem = cartItemRepo.findById(cartItemId);
 
 		if (cartItem.isPresent()) {
 			cartItem.get().setQuantity(cartItemRequest.getQuantity());
@@ -71,11 +72,16 @@ public class cartItemServiceImpl implements cartItemService {
 	}
 
 	@Override
-	public List<cartItem> getCart(long userId) {
+	public List<CartItem> getCart(long userId) {
 		// TODO Auto-generated method stub
-		// return cartItemRepo.findByUser_Id(userId);
-		return cartItemRepo.findByUser_Id(userId);
-
+		List<CartItem> list = cartItemRepo.findByUser_Id(userId);
+		List<CartItem> list2 = new ArrayList<>();
+		
+		for (CartItem cartItem : list) {
+			if(cartItem.getStatus()==0)
+				list2.add(cartItem);
+		}
+		return list2;
 	}
 
 }

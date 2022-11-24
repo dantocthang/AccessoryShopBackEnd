@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 
 import com.nhom9.springjwt.models.Product;
-import com.nhom9.springjwt.models.cartItem;
+import com.nhom9.springjwt.models.CartItem;
 
 public class carItemResponse {
-	@Autowired cartItem items;
+	@Autowired CartItem items;
 	@Autowired Product products;
 	public Errors errors;
 	public String message;
 	
-	public carItemResponse(cartItem items,Product products, Errors errors, String message) {
+	public carItemResponse(CartItem items,Product products, Errors errors, String message) {
 		super();
 		this.items = items;
 		this.products = products;
@@ -20,11 +20,11 @@ public class carItemResponse {
 		this.message = message;
 	}
 
-	public cartItem getItems() {
+	public CartItem getItems() {
 		return items;
 	}
 
-	public void setItems(cartItem items) {
+	public void setItems(CartItem items) {
 		this.items = items;
 	}
 
