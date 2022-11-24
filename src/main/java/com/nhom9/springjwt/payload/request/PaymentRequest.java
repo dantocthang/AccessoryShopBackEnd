@@ -5,17 +5,17 @@ import javax.validation.constraints.NotNull;
 public class PaymentRequest {
 	
 	@NotNull
-	private Long cartItems_id;
+	private Long cart_id;
 	
 	@NotNull
 	private String paymentMethod;
 
-	public Long getCartItems_id() {
-		return cartItems_id;
+	public Long getCart_id() {
+		return cart_id;
 	}
 
-	public void setCartItems_id(Long cartItems_id) {
-		this.cartItems_id = cartItems_id;
+	public void setCart_id(Long cart_id) {
+		this.cart_id = cart_id;
 	}
 
 	public String getPaymentMethod() {

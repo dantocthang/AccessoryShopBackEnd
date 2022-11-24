@@ -110,7 +110,7 @@ public class InvoiceController {
 
 		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow();
 		if (invoice.isWasPay() == false)
-			return new ResponseEntity<>(invoiceService.updateProductsInInvoice(invoice, invoiceRequest.getCartItems_id()), HttpStatus.OK);
+			return new ResponseEntity<>(invoiceService.updateProductsInInvoice(invoice, invoiceRequest.getCart_id()), HttpStatus.OK);
 		else {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

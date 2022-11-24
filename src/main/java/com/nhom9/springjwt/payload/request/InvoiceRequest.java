@@ -20,11 +20,11 @@ public class InvoiceRequest {
 		this.user_id = user_id;
 	}
 
-	public Long getCartItems_id() {
+	public Long getCart_id() {
 		return cart_id;
 	}
 
-	public void setCartItems_id(Long cart_id) {
+	public void setCart_id(Long cart_id) {
 		this.cart_id = cart_id;
 	}
 
