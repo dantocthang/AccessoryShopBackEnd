@@ -31,7 +31,7 @@ public class Address {
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "address", orphanRemoval = true)
-	private List<Invoice> invoices = new ArrayList<>();
+    private List<Invoice> invoices = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -65,13 +65,22 @@ public class Address {
         this.ward = ward;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Address() {
     }
 
-    public Address(String address, String phone, Ward ward) {
+    public Address(String address, String phone, Ward ward, User user) {
         this.address = address;
         this.phone = phone;
         this.ward = ward;
+        this.user = user;
     }
 
 }

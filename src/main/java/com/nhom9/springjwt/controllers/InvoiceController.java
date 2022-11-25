@@ -43,9 +43,9 @@ public class InvoiceController {
 		return new ResponseEntity<>(invoiceService.creatInvoice(invoiceRequest), HttpStatus.CREATED);
 	}
 
-//	Lấy ra toàn bộ hóa đơn để Admin xem
+	// Lấy ra toàn bộ hóa đơn để Admin xem
 	@GetMapping("/getAllInvoices")
-//	@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<List<Invoice>> getAllInvoices() {
 		try {
 			List<Invoice> lstInvoices = invoiceService.getAllInvoices();
@@ -55,9 +55,9 @@ public class InvoiceController {
 		}
 	}
 
-//	Lấy ra toàn bộ hóa đơn của người dùng A đã thanh toán thành công
+	// Lấy ra toàn bộ hóa đơn của người dùng A đã thanh toán thành công
 	@GetMapping("/getAllInvoicesPaySuccessByUser/{userId}")
-//	@PreAuthorize("hasRole('USER'))
+	// @PreAuthorize("hasRole('USER'))
 	public ResponseEntity<List<Invoice>> getInvoicesByUser(@PathVariable("userId") Long userId) {
 		try {
 			List<Invoice> lstInvoices = invoiceService.getAllInvoicesPaySuccessByUser(userId);
@@ -67,7 +67,8 @@ public class InvoiceController {
 		}
 	}
 
-//	Lấy ra chỉ 1 hóa đơn của người dùng A (khi người dùng bấm từ giỏ hàng vào thanh toán hoặc khi bấm vào xem chi tiết 1 hóa đơn đã thành công nào đó)
+	// Lấy ra chỉ 1 hóa đơn của người dùng A (khi người dùng bấm từ giỏ hàng vào
+	// thanh toán hoặc khi bấm vào xem chi tiết 1 hóa đơn đã thành công nào đó)
 	@GetMapping("/getInvoice/{userId}/{invoiceId}")
 	public ResponseEntity<Invoice> getInvoice(@PathVariable("userId") Long userId,
 			@PathVariable("invoiceId") Long invoiceId) {
@@ -91,9 +92,9 @@ public class InvoiceController {
 		}
 	}
 
-//	Chỉ MODERATOR hoặc ADMIN mới có quyền xóa
+	// Chỉ MODERATOR hoặc ADMIN mới có quyền xóa
 	@DeleteMapping("/deleteInvoice/{id}")
-//	@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<?> deleteCartItem(@PathVariable("id") Long invoiceId) {
 		try {
 			invoiceService.deleteInvoiceById(invoiceId);
@@ -103,22 +104,24 @@ public class InvoiceController {
 		}
 	}
 
-//	Cập nhật lại các sản phẩm khi đã chỉnh, thêm, xóa trong giỏ hàng
+	// Cập nhật lại các sản phẩm khi đã chỉnh, thêm, xóa trong giỏ hàng
 	@PutMapping(value = "/updateProductsInInvoice/{invoiceId}", consumes = { "*/*" })
 	public ResponseEntity<Optional<Invoice>> updateProductsInInvoice(@PathVariable("invoiceId") Long invoiceId,
 			@Valid @RequestBody InvoiceRequest invoiceRequest) {
 
 		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow();
 		if (invoice.isWasPay() == false)
-			return new ResponseEntity<>(invoiceService.updateProductsInInvoice(invoice, invoiceRequest.getCartItems_id()), HttpStatus.OK);
+			return new ResponseEntity<>(invoiceService.updateProductsInInvoice(invoice, invoiceRequest.getUser_id()),
+					HttpStatus.OK);
 		else {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-//	Sau khi đã chọn phương thức thanh toán => setPaySuccess để gán hóa đơn này đã thanh toán thành công + xóa các sản phẩm trong giỏ hàng hiện tại
+
+	// Sau khi đã chọn phương thức thanh toán => setPaySuccess để gán hóa đơn này đã
+	// thanh toán thành công + xóa các sản phẩm trong giỏ hàng hiện tại
 	@PutMapping(value = "/setPaySuccess/{invoiceId}", consumes = { "*/*" })
-//	@PreAuthorize("hasRole('USER'))
+	// @PreAuthorize("hasRole('USER'))
 	public ResponseEntity<?> setPaySuccess(@PathVariable("invoiceId") Long invoiceId,
 			@Valid @RequestBody PaymentRequest paymentRequest) {
 		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow();
