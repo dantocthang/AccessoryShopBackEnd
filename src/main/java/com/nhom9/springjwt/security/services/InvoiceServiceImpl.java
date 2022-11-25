@@ -113,7 +113,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	@Override
 	public Optional<Invoice> setPaymentSuccess(Invoice invoice, PaymentRequest paymentRequest) {
-		List<CartItem> listCartItem = cartItemService.getCart(paymentRequest.getCart_id());
+		
 		
 		LocalDateTime now = LocalDateTime.now();
 		int year = now.getYear();
@@ -127,7 +127,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 		invoice.setWasPay(true);
 		invoice.setTimeCreate(timeString);
 		invoiceRepository.save(invoice);
-		
+		List<CartItem> listCartItem = cartItemService.getCart(paymentRequest.getUser_id());
+
 		for (CartItem cartItem : listCartItem) {
 			cartItem.setStatus(1);
 			cartItemReponsitory.save(cartItem);
