@@ -22,7 +22,7 @@ public interface InvoiceService {
 
 	void deleteInvoiceById(Long invoiceId);
 
-	Optional<Invoice> updateProductsInInvoice(Invoice invoice, long cartItemsId);
+	Optional<Invoice> updateProductsInInvoice(Invoice invoice, long userId);
 
 	Optional<Invoice> setPaymentSuccess(Invoice invoice, PaymentRequest paymentRequest);
 }

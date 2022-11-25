@@ -104,13 +104,13 @@ public class InvoiceController {
 	}
 
 //	Cập nhật lại các sản phẩm khi đã chỉnh, thêm, xóa trong giỏ hàng
-	@PutMapping(value = "/updateProductsInInvoice/{invoiceId}", consumes = { "*/*" })
+	@PutMapping(value = "/updateInvoice/{invoiceId}", consumes = { "*/*" })
 	public ResponseEntity<Optional<Invoice>> updateProductsInInvoice(@PathVariable("invoiceId") Long invoiceId,
 			@Valid @RequestBody InvoiceRequest invoiceRequest) {
 
 		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow();
 		if (invoice.isWasPay() == false)
-			return new ResponseEntity<>(invoiceService.updateProductsInInvoice(invoice, invoiceRequest.getCartItems_id()), HttpStatus.OK);
+			return new ResponseEntity<>(invoiceService.updateProductsInInvoice(invoice, invoiceRequest.getUser_id()), HttpStatus.OK);
 		else {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
