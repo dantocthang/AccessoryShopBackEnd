@@ -7,9 +7,6 @@ public class InvoiceRequest {
 	private Long user_id;
 	
 	@NotNull
-	private Long cart_id;
-	
-	@NotNull
 	private Long address_id;
 
 	public Long getUser_id() {
@@ -18,14 +15,6 @@ public class InvoiceRequest {
 
 	public void setUser_id(Long user_id) {
 		this.user_id = user_id;
-	}
-
-	public Long getCart_id() {
-		return cart_id;
-	}
-
-	public void setCart_id(Long cart_id) {
-		this.cart_id = cart_id;
 	}
 
 	public Long getAddress_id() {

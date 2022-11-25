@@ -98,8 +98,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public Optional<Invoice> updateProductsInInvoice(Invoice invoice, long cartItemsId) {
-		List<CartItem> listCartItem = cartItemService.getCart(cartItemsId);
+	public Optional<Invoice> updateProductsInInvoice(Invoice invoice, long userId) {
+		List<CartItem> listCartItem = cartItemService.getCart(userId);
 
 		for (CartItem cartItem : listCartItem) {
 			cartItem.setInvoice(invoice);
