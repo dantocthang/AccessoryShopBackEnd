@@ -6,13 +6,15 @@ import org.springframework.validation.Errors;
 import com.nhom9.springjwt.models.Product;
 import com.nhom9.springjwt.models.CartItem;
 
-public class carItemResponse {
-	@Autowired CartItem items;
-	@Autowired Product products;
+public class CartItemResponse {
+	@Autowired
+	CartItem items;
+	@Autowired
+	Product products;
 	public Errors errors;
 	public String message;
-	
-	public carItemResponse(CartItem items,Product products, Errors errors, String message) {
+
+	public CartItemResponse(CartItem items, Product products, Errors errors, String message) {
 		super();
 		this.items = items;
 		this.products = products;
@@ -52,6 +54,4 @@ public class carItemResponse {
 		this.products = products;
 	}
 
-	
-	
 }
