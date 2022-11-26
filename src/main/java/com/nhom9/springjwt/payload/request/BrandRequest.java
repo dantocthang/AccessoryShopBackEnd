@@ -8,9 +8,11 @@ public class BrandRequest {
     @NotBlank(message = "Name is required")
 	private String name;
 
+	@NotNull
+	private Long id;
 
-    @NotNull
-	private Long product_id;
+//    @NotNull
+//	private Long product_id;
 
     public String getName() {
         return name;
@@ -20,19 +22,29 @@ public class BrandRequest {
         this.name = name;
     }
 
-    public Long getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
-    }
-
-    public BrandRequest(@NotBlank(message = "Name is required") String name,
-            @NotNull Long product_id) {
+    public BrandRequest(@NotBlank(message = "Name is required") String name, @NotNull Long id) {
+//    	, ,NotNull Long product_id   (tham số của hàm)
         this.name = name;
-        // this.id = id;
-        this.product_id = product_id;
+        this.id = id;
+//        this.product_id = product_id;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+//	public Long getProduct_id() {
+//		return product_id;
+//	}
+//
+//	public void setProduct_id(Long product_id) {
+//		this.product_id = product_id;
+//	}
+
+	
     
 }
