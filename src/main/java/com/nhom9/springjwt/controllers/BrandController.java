@@ -43,9 +43,10 @@ public class BrandController {
 		}
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Brand> getBrandById(@PathVariable("id") Long id) {
-		Brand brand = brandService.getASingleBrand(id);
+	//get api Brand by name
+	@GetMapping("/{name}")
+	public ResponseEntity<Brand> getBrandByName(@PathVariable("name") String name) {
+		Brand brand = brandService.getASingleBrand(name);
 		return new ResponseEntity<>(brand, HttpStatus.OK);
 
 	}
@@ -55,16 +56,16 @@ public class BrandController {
 		return new ResponseEntity<>(brandService.createBrand(brand), HttpStatus.CREATED);
 	}
 
-	@PutMapping(value = "/{id}", consumes = { "*/*" })
-	public ResponseEntity<Optional<Brand>> updateBrand(@PathVariable("id") Long id,
+	@PutMapping(value = "/{name}", consumes = { "*/*" })
+	public ResponseEntity<Optional<Brand>> updateBrand(@PathVariable("name") String name,
 			@RequestBody @Valid BrandRequest brand) {
-		return new ResponseEntity<>(brandService.updateBrand(id, brand), HttpStatus.CREATED);
+		return new ResponseEntity<>(brandService.updateBrand(name, brand), HttpStatus.CREATED);
 	}
 
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<MessageResponse> deleteBrand(@PathVariable("id") Long id) {
+	@DeleteMapping(value = "/{name}")
+	public ResponseEntity<MessageResponse> deleteBrand(@PathVariable("name") String name) {
 		try {
-			brandService.deleteBrand(id);
+			brandService.deleteBrand(name);
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

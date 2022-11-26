@@ -15,11 +15,11 @@ public interface BrandService {
 
     Brand createBrand(BrandRequest brandRequest);
 
-    Optional<Brand> updateBrand(Long brandId, BrandRequest brandRequest);
+    Optional<Brand> updateBrand(String brandName, BrandRequest brandRequest);
 
-    void deleteBrand(Long brandId);
+    void deleteBrand(String brandName);
 
-    Brand getASingleBrand(Long brandtId);
+    Brand getASingleBrand(Long brandName);
 
     List<Brand> getAllBrands();
 
