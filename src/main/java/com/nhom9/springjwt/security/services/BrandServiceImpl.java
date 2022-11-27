@@ -28,7 +28,7 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Brand createBrand(BrandRequest brandRequest) {
-		Product product = productRepo.findById(brandRequest.getProduct_id()).orElseThrow();
+//		Product product = productRepo.findById(brandRequest.getProduct_id()).orElseThrow();
 		Brand brand = new Brand(brandRequest.getName());
 		return brandRepo.save(brand);
 	}
@@ -38,9 +38,9 @@ public class BrandServiceImpl implements BrandService {
 		// TODO Auto-generated method stub
 		Optional<Brand> brand = brandRepo.findById(brandId);
 		if (brand.isPresent()) {
-			Product product = productRepo.findById(brandRequest.getProduct_id()).orElseThrow();
+//			Product product = productRepo.findById(brandRequest.getProduct_id()).orElseThrow();
 			brand.get().setName(brandRequest.getName());
-			brand.get().setName(brandRequest.getName());
+//			brand.get().setName(brandRequest.getName());
 	
 //			brand.get().setProducts(getAllProducts());
 			brandRepo.save(brand.get());
