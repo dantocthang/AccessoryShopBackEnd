@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nhom9.springjwt.models.Address;
+import com.nhom9.springjwt.models.City;
+import com.nhom9.springjwt.models.District;
 import com.nhom9.springjwt.models.User;
 import com.nhom9.springjwt.models.Ward;
 import com.nhom9.springjwt.payload.request.AddressRequest;
@@ -46,6 +48,46 @@ public class AddressController {
     @Autowired
     UserRepository userRepo;
 
+    @GetMapping("/city")
+    public ResponseEntity<List<City>> getCities() {
+        try {
+            List<City> cities = cityRepo.findAll();
+            return new ResponseEntity<>(cities, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/district")
+    public ResponseEntity<List<District>> getDistricts(@RequestParam Optional<Long> city_id) {
+        try {
+            List<District> districts;
+            if (city_id.isPresent()) {
+                districts = districtRepo.findAllByCity_Id(city_id.get());
+            } else
+                districts = districtRepo.findAll();
+
+            return new ResponseEntity<>(districts, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/ward")
+    public ResponseEntity<List<Ward>> getWards(@RequestParam Optional<Long> district_id) {
+        try {
+            List<Ward> wards;
+            if (district_id.isPresent()) {
+                wards = wardRepo.findAllByDistrict_Id(district_id.get());
+            } else
+                wards = wardRepo.findAll();
+
+            return new ResponseEntity<>(wards, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<List<Address>> getAddresses(@PathVariable("id") Long user_id) {
         try {
@@ -62,7 +104,7 @@ public class AddressController {
             Ward w = wardRepo.findById(address.getWard_id()).get();
             User u = userRepo.findById(address.getUser_id()).get();
             Address a = new Address(address.getAddress(), address.getPhone(), w, u);
-            return new ResponseEntity<>(addressRepo.save(a), HttpStatus.OK);
+            return new ResponseEntity<>(addressRepo.save(a), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
