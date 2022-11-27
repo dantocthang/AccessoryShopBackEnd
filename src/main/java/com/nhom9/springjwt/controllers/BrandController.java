@@ -61,7 +61,7 @@ public class BrandController {
 	}
 
 	// update Brand rest api
-	@PutMapping("/{id}") // 
+	@PutMapping("/{id}")
 	public ResponseEntity<Brand> updateBrand(@PathVariable Long id, @RequestBody Brand brandDetails) {
 		Brand brand = brandRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Brand not exist with id :" + id));
@@ -70,6 +70,7 @@ public class BrandController {
 		Brand updatedEmployee = brandRepository.save(brand);
 		return ResponseEntity.ok(updatedEmployee);
 	}
+
 
 	// delete brand rest api
 	@DeleteMapping("/{id}")
