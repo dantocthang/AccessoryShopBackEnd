@@ -112,8 +112,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public Optional<Invoice> setPaymentSuccess(Invoice invoice, PaymentRequest paymentRequest) {
-		List<CartItem> listCartItem = cartItemService.getCart(paymentRequest.getUser_id());
+	public Optional<Invoice> setPaymentSuccess(Invoice invoice, String paymentMethod, Long userId) {
+		List<CartItem> listCartItem = cartItemService.getCart(userId);
 		
 		LocalDateTime now = LocalDateTime.now();
 		int year = now.getYear();
@@ -123,7 +123,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 		int minute = now.getMinute();
 		String timeString = day + "-" + month + "-" + year + " " + hour + ":" + minute;
 		
-		invoice.setPaymentMethod(paymentRequest.getPaymentMethod());
+		invoice.setPaymentMethod(paymentMethod);
 		invoice.setWasPay(true);
 		invoice.setTimeCreate(timeString);
 		invoiceRepository.save(invoice);

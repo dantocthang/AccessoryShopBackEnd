@@ -96,6 +96,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         .antMatchers("/api/category/**").permitAll()
         .antMatchers("/api/search/**").permitAll()
         .antMatchers("/api/invoice/**").permitAll()
+        .antMatchers("/api/payment/**").permitAll()
         .anyRequest().authenticated();
 
     http.authenticationProvider(authenticationProvider());

@@ -1,6 +1,7 @@
 package com.nhom9.springjwt.controllers;
 
 import javax.validation.Valid;
+import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +53,9 @@ public class AuthController {
         new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    
     String jwt = jwtUtils.generateJwtToken(authentication);
-
+    
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
     return ResponseEntity.ok(new JwtResponse(
         jwt,

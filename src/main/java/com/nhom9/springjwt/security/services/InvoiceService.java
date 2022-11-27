@@ -24,5 +24,5 @@ public interface InvoiceService {
 
 	Optional<Invoice> updateProductsInInvoice(Invoice invoice, long cartItemsId);
 
-	Optional<Invoice> setPaymentSuccess(Invoice invoice, PaymentRequest paymentRequest);
+	Optional<Invoice> setPaymentSuccess(Invoice invoice, String paymentMethod, Long userId);
 }
