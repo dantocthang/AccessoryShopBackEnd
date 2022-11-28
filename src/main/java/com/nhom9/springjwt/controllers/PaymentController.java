@@ -1,6 +1,7 @@
 package com.nhom9.springjwt.controllers;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,35 +45,39 @@ public class PaymentController {
 	InvoiceRepository invoiceRepository;
 	@Autowired
 	InvoiceService invoiceService;
-	
+
 	Invoice invoice0 = new Invoice();
 	Long userId0 = 0L;
 
-//	// Sau khi đã chọn phương thức thanh toán => setPaySuccess để gán hóa đơn này đã
-//	// thanh toán thành công + xóa các sản phẩm trong giỏ hàng hiện tại
-//	@PutMapping(value = "/setPaySuccess/{invoiceId}", consumes = { "*/*" })
-//	// @PreAuthorize("hasRole('USER'))
-//	public ResponseEntity<Invoice> setPaySuccess(@PathVariable("invoiceId") Long invoiceId,
-//			@Valid @RequestBody PaymentRequest paymentRequest) {
-//		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow();
-//		try {
-//			invoiceService.setPaymentSuccess(invoice, paymentRequest);
-//			return new ResponseEntity<>(invoice, HttpStatus.OK);
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
+	// // Sau khi đã chọn phương thức thanh toán => setPaySuccess để gán hóa đơn này
+	// đã
+	// // thanh toán thành công + xóa các sản phẩm trong giỏ hàng hiện tại
+	// @PutMapping(value = "/setPaySuccess/{invoiceId}", consumes = { "*/*" })
+	// // @PreAuthorize("hasRole('USER'))
+	// public ResponseEntity<Invoice> setPaySuccess(@PathVariable("invoiceId") Long
+	// invoiceId,
+	// @Valid @RequestBody PaymentRequest paymentRequest) {
+	// Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow();
+	// try {
+	// invoiceService.setPaymentSuccess(invoice, paymentRequest);
+	// return new ResponseEntity<>(invoice, HttpStatus.OK);
+	// } catch (Exception e) {
+	// // TODO: handle exception
+	// return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	// }
+	// }
 
-	//Thay thế cho setPaySuccess ở trên
+	// Thay thế cho setPaySuccess ở trên
 	@PostMapping("/pay/{invoiceId}")
-	public String pay(HttpServletRequest req, @PathVariable("invoiceId") Long invoiceId, @Valid @RequestBody PaymentRequest paymentRequest)
+	public String pay(HttpServletRequest req, @PathVariable("invoiceId") Long invoiceId,
+			@Valid @RequestBody PaymentRequest paymentRequest)
 			throws ServletException, IOException {
 
 		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow();
-		invoice0 = invoice;	userId0 = paymentRequest.getUser_id();
-		
-		if (paymentRequest.getPaymentMethod().equals("VnPay")) {
+		invoice0 = invoice;
+		userId0 = paymentRequest.getUser_id();
+
+		if (paymentRequest.getPaymentMethod().equals("vnpay")) {
 			String vnp_Version = "2.1.0";
 			String vnp_Command = "pay";
 			String vnp_OrderInfo = "Thanh toan don hang";
@@ -143,19 +149,18 @@ public class PaymentController {
 
 			invoice0.setPaymentMethod("VnPay");
 			System.out.println(paymentUrl);
-			
-// => trả ra đường dẫn đưa đi thanh toán Vnpay
+
+			// => trả ra đường dẫn đưa đi thanh toán Vnpay
 			return paymentUrl;
-		}
-		else {
-// => trả ra đường dẫn trả về lỗi tại đây
+		} else {
+			// => trả ra đường dẫn trả về lỗi tại đây
 			return "Tìm không thấy phương thức thanh toán đã đưa vào!";
 
 		}
 	}
 
 	@GetMapping("/returnFromVnpay")
-	public ResponseEntity<Invoice> returnFromVnpay(HttpServletRequest request) throws ServletException, IOException {
+	public ResponseEntity<?> returnFromVnpay(HttpServletRequest request) throws ServletException, IOException {
 		System.out.println("Đã vào đây thành công!");
 		try {
 			Map fields = new HashMap();
@@ -189,23 +194,29 @@ public class PaymentController {
 					if (checkAmount) {
 						if (checkOrderStatus) {
 							if ("00".equals(request.getParameter("vnp_ResponseCode"))) {
-//	=> giao dịch thành công
+								// => giao dịch thành công
 								System.out.println("Đã vào 1, giao dịch thành công!");
 								// Here Code update PaymnentStatus = 1 into your Database
 								Invoice invoice = invoiceRepository.findById(invoice0.getInvoiceId()).orElseThrow();
 								try {
 									invoiceService.setPaymentSuccess(invoice, invoice0.getPaymentMethod(), userId0);
-									return new ResponseEntity<>(invoice, HttpStatus.OK);
+									HttpHeaders headers = new HttpHeaders();
+									headers.add("Location", "http://127.0.0.1:5173/payment-success");
+									return new ResponseEntity(headers, HttpStatus.FOUND);
+									// return new ResponseEntity<>(invoice, HttpStatus.OK);
 								} catch (Exception e) {
 									// TODO: handle exception
 									return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 								}
 
 							} else {
-//	=> giao dịch thất bại
+								// => giao dịch thất bại
 								System.out.println("Đã vào 2, giao dịch thất bại!");
 								// Here Code update PaymnentStatus = 2 into your Database
 								System.out.println("Tại chỗ này gán lệnh trả về trang giao dịch thất bại!");
+								HttpHeaders headers = new HttpHeaders();
+								headers.add("Location", "http://127.0.0.1:5173/payment-failed");
+								return new ResponseEntity(headers, HttpStatus.FOUND);
 							}
 						} else {
 
@@ -222,6 +233,9 @@ public class PaymentController {
 			}
 		} catch (Exception e) {
 			System.out.print("{\"RspCode\":\"99\",\"Message\":\"Unknow error\"}");
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Location", "http://127.0.0.1:5173/payment-failed");
+			return new ResponseEntity(headers, HttpStatus.FOUND);
 		}
 
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
