@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 import com.nhom9.springjwt.models.Address;
 import com.nhom9.springjwt.models.CartItem;
 import com.nhom9.springjwt.models.Invoice;
+import com.nhom9.springjwt.models.Product;
 import com.nhom9.springjwt.models.User;
 import com.nhom9.springjwt.payload.request.InvoiceRequest;
 import com.nhom9.springjwt.payload.request.PaymentRequest;
 import com.nhom9.springjwt.repository.AddressRepository;
 import com.nhom9.springjwt.repository.CartItemRepository;
 import com.nhom9.springjwt.repository.InvoiceRepository;
+import com.nhom9.springjwt.repository.ProductRepository;
 import com.nhom9.springjwt.repository.UserRepository;
 
 @Service
@@ -26,6 +28,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	UserRepository userRepository;
 	@Autowired
 	InvoiceRepository invoiceRepository;
+	@Autowired
+	ProductRepository productRepository;
 	@Autowired
 	AddressRepository addressRepository;
 	@Autowired
@@ -45,10 +49,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 		for (CartItem cartItem : cartItems) {
 			totalPrice += cartItem.getQuantity() * cartItem.getProduct().getPrice();
 		}
-		
+
 		Invoice invoice = new Invoice(user, "", "", totalPrice, false, cartItems, address);
-		//timeCreate & paymentMethod gán "" vì chưa thanh toán thành công nên chưa thể tạo.
-		
+		// timeCreate & paymentMethod gán "" vì chưa thanh toán thành công nên chưa thể
+		// tạo.
+
 		invoiceRepository.save(invoice);
 		totalPrice = 0;
 
@@ -74,17 +79,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 	public List<Invoice> getAllUserInvoices(long userId) {
 		return invoiceRepository.findByUser_Id(userId);
 	}
-	
+
 	@Override
 	public List<Invoice> getAllInvoicesPaySuccessByUser(long userId) {
 		List<Invoice> list = invoiceRepository.findByUser_Id(userId);
 		List<Invoice> list2 = new ArrayList<>();
-		
+
 		for (Invoice invoice : list) {
-			if(invoice.isWasPay())
+			if (invoice.isWasPay())
 				list2.add(invoice);
 		}
-		
+
 		return list2;
 	}
 
@@ -111,10 +116,36 @@ public class InvoiceServiceImpl implements InvoiceService {
 		return Optional.of(invoice);
 	}
 
+	// @Override
+	// public Optional<Invoice> setPaymentSuccess(Invoice invoice, String
+	// paymentMethod, Long userId) {
+	// List<CartItem> listCartItem = cartItemService.getCart(userId);
+
+	// LocalDateTime now = LocalDateTime.now();
+	// int year = now.getYear();
+	// int month = now.getMonthValue();
+	// int day = now.getDayOfMonth();
+	// int hour = now.getHour();
+	// int minute = now.getMinute();
+	// String timeString = day + "-" + month + "-" + year + " " + hour + ":" +
+	// minute;
+
+	// invoice.setPaymentMethod(paymentMethod);
+	// invoice.setWasPay(true);
+	// invoice.setTimeCreate(timeString);
+	// invoiceRepository.save(invoice);
+
+	// for (CartItem cartItem : listCartItem) {
+	// cartItem.setStatus(1);
+	// cartItemReponsitory.save(cartItem);
+	// }
+
+	// return Optional.of(invoice);
+	// }
 	@Override
 	public Optional<Invoice> setPaymentSuccess(Invoice invoice, String paymentMethod, Long userId) {
 		List<CartItem> listCartItem = cartItemService.getCart(userId);
-		
+
 		LocalDateTime now = LocalDateTime.now();
 		int year = now.getYear();
 		int month = now.getMonthValue();
@@ -122,17 +153,23 @@ public class InvoiceServiceImpl implements InvoiceService {
 		int hour = now.getHour();
 		int minute = now.getMinute();
 		String timeString = day + "-" + month + "-" + year + " " + hour + ":" + minute;
-		
+
 		invoice.setPaymentMethod(paymentMethod);
 		invoice.setWasPay(true);
 		invoice.setTimeCreate(timeString);
 		invoiceRepository.save(invoice);
-		
+
+		Product product = new Product();
+
 		for (CartItem cartItem : listCartItem) {
 			cartItem.setStatus(1);
 			cartItemReponsitory.save(cartItem);
+
+			product = cartItem.getProduct();
+			product.setStock(product.getStock() - cartItem.getQuantity());
+			productRepository.save(product);
 		}
-		
+
 		return Optional.of(invoice);
 	}
 }
