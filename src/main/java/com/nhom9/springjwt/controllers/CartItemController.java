@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import com.nhom9.springjwt.models.CartItem;
 import com.nhom9.springjwt.payload.request.CartItemRequest;
+import com.nhom9.springjwt.payload.response.CartItemResponse;
 import com.nhom9.springjwt.payload.response.MessageResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,8 @@ public class CartItemController {
 
 	/* create cart item */
 	@PostMapping(value = "/create", consumes = { "*/*" })
-	public ResponseEntity<CartItem> creatCartItem(@Valid @RequestBody CartItemRequest cartItem) {
-		return new ResponseEntity<>(cartService.createCartItem(cartItem), HttpStatus.CREATED);
+	public CartItemResponse creatCartItem(@Valid @RequestBody CartItemRequest cartItem) {
+		return cartService.createCartItem(cartItem);
 	}
 
 	/* delete cart item with id */

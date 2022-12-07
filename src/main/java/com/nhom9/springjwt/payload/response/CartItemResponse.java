@@ -9,15 +9,12 @@ import com.nhom9.springjwt.models.CartItem;
 public class CartItemResponse {
 	@Autowired
 	CartItem items;
-	@Autowired
-	Product products;
 	public Errors errors;
 	public String message;
 
-	public CartItemResponse(CartItem items, Product products, Errors errors, String message) {
+	public CartItemResponse(CartItem items, Errors errors, String message) {
 		super();
 		this.items = items;
-		this.products = products;
 		this.errors = errors;
 		this.message = message;
 	}
@@ -46,12 +43,5 @@ public class CartItemResponse {
 		this.message = message;
 	}
 
-	public Product getProducts() {
-		return products;
-	}
-
-	public void setProducts(Product products) {
-		this.products = products;
-	}
 
 }
