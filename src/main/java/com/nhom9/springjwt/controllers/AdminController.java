@@ -15,11 +15,10 @@ import com.nhom9.springjwt.security.services.AdminService;
 public class AdminController {
 	@Autowired
 	AdminService adminService;
-	
-	/*get dash broad data*/
-	@GetMapping("/dashbroad")
-	public DashbroadResponse dashBroad()
-	{
+
+	/* get dash broad data */
+	@GetMapping("/dashboard")
+	public DashbroadResponse dashBroad() {
 		return adminService.getDashBroad();
 	}
 }
