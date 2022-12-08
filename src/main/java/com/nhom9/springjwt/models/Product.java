@@ -150,6 +150,9 @@ public class Product {
 	public Brand getBrand() {
 		return brand;
 	}
+	public Long getBrandById(Long id) {
+		return brand.getId().longValue();
+	}
 
 	public void setBrand(Brand brand) {
 		this.brand = brand;

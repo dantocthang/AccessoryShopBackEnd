@@ -57,11 +57,15 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public void deleteBrand(Long brandId) {
-		// TODO Auto-generated method stub
-		if (brandRepo.findById(brandId).get().getId().equals(brandId)) {
+		
+		boolean hasExist = brandRepo.existsById(brandId);
+		
+//		if (brandRepo.findById(brandId).get().getId().equals(brandId))
+		if(hasExist){
 			brandRepo.deleteById(brandId);
 		} else
-			throw new InvalidConfigurationPropertyValueException("brandId", brandId, "Not found");
+			throw new InvalidConfigurationPropertyValueException("brandId", brandId, "Not Found");
+	
 	}
 
 	@Override
