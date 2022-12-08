@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import com.nhom9.springjwt.models.Invoice;
 import com.nhom9.springjwt.payload.request.InvoiceRequest;
-import com.nhom9.springjwt.payload.request.PaymentRequest;
 import com.nhom9.springjwt.payload.response.MessageResponse;
 import com.nhom9.springjwt.repository.AddressRepository;
 import com.nhom9.springjwt.repository.InvoiceRepository;
@@ -15,6 +14,7 @@ import com.nhom9.springjwt.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +37,8 @@ public class InvoiceController {
 	InvoiceRepository invoiceRepository;
 	@Autowired
 	AddressRepository addressRepository;
+	@Autowired
+  	AuthenticationManager authenticationManager;
 
 	@PostMapping(value = "/create", consumes = { "*/*" })
 	public ResponseEntity<Invoice> creatInvoice(@Valid @RequestBody InvoiceRequest invoiceRequest) {
@@ -70,8 +72,8 @@ public class InvoiceController {
 	// Lấy ra chỉ 1 hóa đơn của người dùng A (khi người dùng bấm từ giỏ hàng vào
 	// thanh toán hoặc khi bấm vào xem chi tiết 1 hóa đơn đã thành công nào đó)
 	@GetMapping("/getInvoice/{userId}/{invoiceId}")
-	public ResponseEntity<Invoice> getInvoice(@PathVariable("userId") Long userId,
-			@PathVariable("invoiceId") Long invoiceId) {
+	public ResponseEntity<Invoice> getInvoice(@PathVariable("userId") Long userId, @PathVariable("invoiceId") Long invoiceId) {
+		
 		try {
 			boolean check = false;
 			List<Invoice> listInvoices = invoiceService.getAllUserInvoices(userId);
@@ -114,22 +116,6 @@ public class InvoiceController {
 			return new ResponseEntity<>(invoiceService.updateProductsInInvoice(invoice, invoiceRequest.getUser_id()),
 					HttpStatus.OK);
 		else {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	// Sau khi đã chọn phương thức thanh toán => setPaySuccess để gán hóa đơn này đã
-	// thanh toán thành công + xóa các sản phẩm trong giỏ hàng hiện tại
-	@PutMapping(value = "/setPaySuccess/{invoiceId}", consumes = { "*/*" })
-	// @PreAuthorize("hasRole('USER'))
-	public ResponseEntity<?> setPaySuccess(@PathVariable("invoiceId") Long invoiceId,
-			@Valid @RequestBody PaymentRequest paymentRequest) {
-		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow();
-		try {
-			invoiceService.setPaymentSuccess(invoice, paymentRequest);
-			return ResponseEntity.ok(new MessageResponse("Thanh toán thành công hóa đơn " + invoiceId + "!"));
-		} catch (Exception e) {
-			// TODO: handle exception
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

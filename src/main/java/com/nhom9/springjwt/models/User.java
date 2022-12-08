@@ -16,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "users", uniqueConstraints = {
     @UniqueConstraint(columnNames = "username"),
     @UniqueConstraint(columnNames = "email"),
-    @UniqueConstraint(columnNames = "role")
 })
 public class User {
   @Id
@@ -93,15 +92,6 @@ public class User {
   }
 
   public void setRole(String role) {
-    this.role = role;
-  }
-
-  public User(Long id, @NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email,
-      @NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 120) String role) {
-    this.id = id;
-    this.username = username;
-    this.email = email;
-    this.password = password;
     this.role = role;
   }
 
