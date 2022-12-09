@@ -7,5 +7,6 @@ import com.nhom9.springjwt.models.Brand;
 
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long> {
+	boolean existsById(Long id);
 
 }
