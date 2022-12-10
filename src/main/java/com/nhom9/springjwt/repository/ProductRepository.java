@@ -15,4 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	
 	@Query(value="SELECT * FROM product WHERE name LIKE BINARY CONCAT('%',:text,'%')",nativeQuery = true)
 	List<Product> findByNameLike(@Param("text") String text);
+	
+	boolean existsByCategoryId(Long id);
 }
