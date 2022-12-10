@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.nhom9.springjwt.repository.CategoryRepository;
+import com.nhom9.springjwt.repository.ProductRepository;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,6 +30,8 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+	@Autowired
+	private ProductRepository productRepository;
 
 	// get all categorys
 	@GetMapping("")
@@ -62,14 +66,29 @@ public class CategoryController {
 	}
 
 	// delete employee rest api
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Map<String, Boolean>> deletecategory(@PathVariable Long id) {
-		Category categorymodel = categoryRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Category not exist with id :" + id));
+	@DeleteMapping(value = "/{id}", consumes = { "*/*" })
+		public ResponseEntity<String> deleteCategory(@PathVariable("id") Long id) {
+		boolean hasCategory = categoryRepository.existsById(id);
+		boolean hasExits = productRepository.existsByCategoryId(id);
+		
+		if(hasCategory) {
+			System.out.print("Id not exits");
+			if(!hasExits) {
+				categoryRepository.deleteById(id);
+				return new ResponseEntity<>("Delete", HttpStatus.BAD_REQUEST );
+			}
+			else {
+				System.out.println("Ton tai Category trong product");
+				return new ResponseEntity<>("Still use in product", HttpStatus.BAD_REQUEST);
+			}
+		}
+		else if(!hasCategory){
+			System.out.println("Id not exits");
+			return new ResponseEntity<>("ID "+id+" not found", HttpStatus.NOT_FOUND);
+		}else {
+			System.out.println("Lỗi 500 INTERNAL SERVER ERRROR");
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-		categoryRepository.delete(categorymodel);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return ResponseEntity.ok(response);
 	}
 }
