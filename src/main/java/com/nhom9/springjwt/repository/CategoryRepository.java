@@ -7,5 +7,5 @@ import com.nhom9.springjwt.models.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-	
+	boolean existsById(Long id);
 }
