@@ -24,4 +24,29 @@ public class City {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "city", orphanRemoval = true)
     private List<District> districts = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<District> getDistricts() {
+        return districts;
+    }
+
+    public void setDistricts(List<District> districts) {
+        this.districts = districts;
+    }
+
 }

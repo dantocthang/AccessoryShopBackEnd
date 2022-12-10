@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 
-public class cartItemRequest {
+public class CartItemRequest {
 	@NotNull
 	private Long user_id;
 	@NotNull

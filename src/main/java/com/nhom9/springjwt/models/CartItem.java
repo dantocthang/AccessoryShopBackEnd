@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-public class cartItem {
+public class CartItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -31,17 +31,24 @@ public class cartItem {
 	@JoinColumn(name = "product_id")
 	@ManyToOne
 	private Product product;
+
+	@JoinColumn(name = "invoice_id")
+	@ManyToOne
+	private Invoice invoice;
 	
 	@NotNull
 	@Min(0)
 	private int quantity;
+
+	@NotNull
+	private int status;
 	
-	public cartItem()
+	public CartItem()
 	{
 		super();
 	}
 
-	public cartItem(User user, Product product, @NotNull @Min(0) int quantity) {
+	public CartItem(User user, Product product, @NotNull @Min(0) int quantity) {
 		super();
 		this.user = user;
 		this.product = product;
@@ -72,7 +79,17 @@ public class cartItem {
 		this.product = product;
 	}
 	
-	
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	
 	
 }

@@ -89,5 +89,6 @@ public class CategoryController {
 			System.out.println("Lỗi 500 INTERNAL SERVER ERRROR");
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 	}
 }

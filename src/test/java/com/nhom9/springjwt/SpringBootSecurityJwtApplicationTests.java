@@ -8,6 +8,7 @@ public class SpringBootSecurityJwtApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		//day la test
 	}
 
 }

@@ -12,11 +12,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.nhom9.springjwt.models.User;
 import com.nhom9.springjwt.security.jwt.AuthEntryPointJwt;
 import com.nhom9.springjwt.security.jwt.AuthTokenFilter;
 import com.nhom9.springjwt.security.services.UserDetailsServiceImpl;
@@ -90,9 +93,14 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeRequests().antMatchers("/api/auth/**").permitAll()
         .antMatchers("/api/product/**").permitAll()
+        .antMatchers("/api/address/**").permitAll()
+        .antMatchers("/api/brand/**").permitAll()
         .antMatchers("/api/cart/**").permitAll()
         .antMatchers("/api/category/**").permitAll()
         .antMatchers("/api/search/**").permitAll()
+        .antMatchers("/api/invoice/**").permitAll()
+        .antMatchers("/api/payment/**").permitAll()
+        .antMatchers("/api/admin/**").permitAll()
         .anyRequest().authenticated();
 
     http.authenticationProvider(authenticationProvider());
@@ -101,4 +109,19 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
     return http.build();
   }
+ 
+////  @Override  
+//  protected void configure(HttpSecurity http) throws Exception {  
+//	  
+//      http                              
+//      .authorizeRequests()  
+//          .anyRequest().hasRole("USER")  
+//          .and().formLogin().and()  
+//      .httpBasic()  
+//      .and()  
+//      .logout()  
+//      .logoutUrl("/j_spring_security_logout")  
+//      .logoutSuccessUrl("/")  
+//      ;  
+//  } 
 }
